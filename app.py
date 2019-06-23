@@ -13,6 +13,4 @@ def subscribe_play_song_callback(hermes, intent_message):
         print("For slot: {}, the confidence is: {}".format(slot.slot_name, slot.confidence_score))
 
 with Hermes(MQTT_ADDR) as h: # Initialization of a connection to the MQTT broker
-    h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback)
-        .subscribe_intent("playSong", subscribe_play_song_callback)
-        .start()
+    h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback).subscribe_intent("playSong", subscribe_play_song_callback).start()
