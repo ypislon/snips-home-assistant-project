@@ -6,5 +6,4 @@ def subscribe_weather_forecast_callback(hermes, intent_message):    # Defining c
     print("Parsed intent : {}".format(intent_message.intent.intent_name))
 
 with Hermes(MQTT_ADDR) as h: # Initialization of a connection to the MQTT broker
-    h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback) \  # Registering callback functions to handle the searchWeatherForecast intent
-         .start()
+    h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback).start()
