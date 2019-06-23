@@ -9,8 +9,9 @@ def subscribe_weather_forecast_callback(hermes, intent_message):    # Defining c
 
 def subscribe_play_song_callback(hermes, intent_message):
     print("Parsed intent: {}".format(intent_message.intent.intent_name))
+    print("slot value: {}".format(intent_message.slots.song_name.first().value))
     for slot in intent_message.slots.song_name:
-        print("For slot: {}, the confidence is: {}".format(slot.slot_name, slot.confidence_score))
+        print("For slot: {}, the confidence is: {}, the value is {}".format(slot.slot_name, slot.confidence_score, slot.value))
 
 with Hermes(MQTT_ADDR) as h: # Initialization of a connection to the MQTT broker
     h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback).subscribe_intent("playSong", subscribe_play_song_callback).start()
