@@ -1,14 +1,22 @@
+#!/usr/bin/env python2
+
 from hermes_python.hermes import Hermes, MqttOptions
 import json
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+import secrets
 
-MQTT_ADDR = "localhost:1883"        # Specify host and port for the MQTT broker
+# Specify host and port for the MQTT broker
+MQTT_ADDR = "localhost:1883"
 
-def subscribe_weather_forecast_callback(hermes, intent_message):    # Defining callback functions to handle an intent that asks for the weather.
-    print("Parsed intent : {}".format(intent_message.intent.intent_name))
-    print("Slots: {}".format(intent_message.slots))
+# Bootstrap spotipy to connect to spotify api
+client_credentials_manager = SpotifyClientCredentials(client_id=secrets.spotify_client_id, client_secret=secrets.spotify_client_secret)
+cache_token = client_credentials_manager.get_access_token()
+sp = spotipy.Spotify(cache_token)
 
+result = sp.search(q="life", limit=20)
 
+# Define callback functions for every intent
 def subscribe_play_song_callback(hermes, intent_message):
     print("Parsed intent: {}".format(intent_message.intent.intent_name))
     print("slot value: {}".format(intent_message.slots.song_name.first().value))
@@ -19,13 +27,15 @@ def subscribe_play_song_callback(hermes, intent_message):
     for slot in intent_message.slots.song_name:
         print("For slot: {}, the confidence is: {}".format(slot.slot_name, slot.confidence_score))
 
-
-    sp = spotipy.Spotify()
     result = sp.search(intent_message.slots.song_name.first().value)
     print(result)
 
     return hermes.publish_continue_session(session_id, user_input, [])
 
-
-with Hermes(MQTT_ADDR) as h: # Initialization of a connection to the MQTT broker
-    h.subscribe_intent("searchWeatherForecast", subscribe_weather_forecast_callback).subscribe_intent("playSong", subscribe_play_song_callback).start()
+# Start mosquitto server and subscribe to intents
+# with Hermes(MQTT_ADDR) as h: # Initialization of a connection to the MQTT broker
+#     h.subscribe_intent("playSong", subscribe_play_song_callback) \
+#       .subscribe_intent("", subscribe_play_song_callback) \
+#       .subscribe_intent("", subscribe_play_song_callback) \
+#       .subscribe_intent("", subscribe_play_song_callback) \
+#       .start()

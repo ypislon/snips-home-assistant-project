@@ -1,0 +1,60 @@
+default_config:
+sensor:
+  - platform: yr
+tts:
+  - platform: google_translate
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+mqtt:
+  broker: 127.0.0.1
+  port: 1883
+python_script:
+snips:
+intent_script:
+  resumeMusic:
+    action:
+      - service: media_player.media_play
+  speakerInterrupt:
+    action:
+      - service: media_player.media_pause
+  volumeDown:
+    action:
+      - service: media_player.volume_set
+        data_template:
+          volume_level: '{{ volume_lower }}'
+  volumeUp:
+    action:
+      - service: media_player.volume_set
+        data_template:
+          volume_level: '{{ volume_level }}'
+  nextSong:
+    action:
+      - service: media_player.media_next_track
+  previousSong:
+    action:
+      - service: media_player.media_previous_track
+  playAlbum:
+    action:
+      - service: media_player.next_song
+  playPlaylist:
+    action:
+      - service: media_player.next_song
+  # getInfos:
+  #   action:
+  #     - service: media_player.next_song
+  playArtist:
+    action:
+      - service: media_player.next_song
+  playSong:
+    action:
+      - service: media_player.next_song
+  volumeLevel:
+    action:
+      - service: media_player.volume_set
+        data_template:
+          volume_level: {{ volume_level }}
