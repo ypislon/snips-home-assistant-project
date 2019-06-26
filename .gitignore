@@ -6,3 +6,9 @@ secrets.py
 bin/
 include/
 lib/
+__pycache__/
+*.pyc
+
+# tooling
+.direnv/
+.envrc
