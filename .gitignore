@@ -1,0 +1,8 @@
+# secret stuff
+secrets.yaml
+secrets.py
+
+# virtualenv stuff
+bin/
+include/
+lib/
